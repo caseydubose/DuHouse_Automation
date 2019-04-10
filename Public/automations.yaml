@@ -1,0 +1,33 @@
+  - alias: The time is
+    initial_state: true
+    trigger:
+      - platform: time
+        at: '14:20:00'
+    action:
+      - service: tts.google_say
+        data:
+          entity_id: media_player.home_group
+          message: "it is 2:20pm"
+  - alias: Noah is Home
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: device_tracker.iphone
+        from: 'not_home'
+        to: 'home'
+    action:
+      - service: tts.google_say
+        data:
+          entity_id: media_player.home_group
+          message: "Noah is home"
+  - id: '1530585383173'
+    alias: Sunset Lights
+    trigger:
+      - event: sunset
+        platform: sun
+    condition:
+      - condition: state
+        entity_id: binary_sensor.graham_ave_away
+        state: 'off'
+    action:
+      - service: light.turn_on
