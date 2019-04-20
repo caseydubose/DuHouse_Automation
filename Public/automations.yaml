@@ -20,14 +20,34 @@
         data:
           entity_id: media_player.home_group
           message: "Noah is home"
-  - id: '1530585383173'
-    alias: Sunset Lights
+  - alias: Sunset Lights
+    initial_state: true
     trigger:
-      - event: sunset
-        platform: sun
-    condition:
-      - condition: state
-        entity_id: binary_sensor.graham_ave_away
-        state: 'off'
+      platform: sun
+      event: sunset
+      offset: "-00:45:00"
     action:
-      - service: light.turn_on
+      service: scene.turn_on
+      entity_id: scene.downstairs_dusk
+  - alias: Goodnight Ella
+    initial_state: true
+    trigger:
+      - platform: time
+        at: '21:15:00'
+    action:
+      - service: scene.turn_on
+        entity_id: scene.downstairs_night, scene.bedtime
+      - service: tts.google_say
+        data:
+         entity_id: media_player.home_group
+         message: "Ella, it is 9:15. Time to brush your teeth and go to bed."
+  - alias: Midnight
+    initial_state: true
+    trigger:
+      - platform: time
+        at: '23:59:00'
+    action:
+      - service: light.turn_off
+        entity_id: group.all_lights
+
+
